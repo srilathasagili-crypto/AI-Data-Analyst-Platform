@@ -2,11 +2,14 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from utils.automl import run_automl
-from utils.ai_insights import generate_ai_insights
-from utils.report_generator import generate_report
-from utils.evaluation import evaluate_model
-from utils.feature_importance import plot_feature_importance
+from automl import run_automl
+from cleaning import clean_data
+from visualizations import show_visualizations
+from evaluation import evaluate_model
+from feature_importance import feature_importance
+from ai_insights import generate_ai_insights
+from report_generator import generate_pdf_report
+from data_loader import load_data
 
 st.set_page_config(page_title="AI Data Analyst Platform", page_icon="📊", layout="wide")
 st.title("📊 AI Data Analyst Platform")
