@@ -12,16 +12,30 @@ st.set_page_config(page_title="AI Data Analyst Platform", page_icon="📊", layo
 st.title("📊 AI Data Analyst Platform")
 st.write("Analyze your business data with AI.")
 
-uploaded_file = st.file_uploader("📂 Upload a CSV or Excel file", type=["csv","xlsx"])
+uploaded_file = st.file_uploader(
+    "📂 Upload your dataset",
+    type=["csv", "xlsx", "json", "parquet", "tsv"]
+)
 
 if uploaded_file is not None:
+
     if uploaded_file.name.endswith(".csv"):
         df = pd.read_csv(uploaded_file)
-    else:
+
+    elif uploaded_file.name.endswith(".xlsx"):
         df = pd.read_excel(uploaded_file)
 
-    st.success("✅ File uploaded successfully!")
+    elif uploaded_file.name.endswith(".json"):
+        df = pd.read_json(uploaded_file)
 
+    elif uploaded_file.name.endswith(".parquet"):
+        df = pd.read_parquet(uploaded_file)
+
+    elif uploaded_file.name.endswith(".tsv"):
+        df = pd.read_csv(uploaded_file, sep="\t")
+
+    st.success("✅ File uploaded successfully!")
+    
     st.header("🧹 Data Cleaning")
     st.subheader("Missing Value Summary")
     st.dataframe(df.isnull().sum())
