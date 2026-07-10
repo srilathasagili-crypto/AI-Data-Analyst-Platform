@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 from automl import run_automl
 from cleaning import clean_data
-from visualizations import show_visualizations
+from visualizations import create_charts
 from evaluation import evaluate_model
 from feature_importance import feature_importance
 from ai_insights import generate_ai_insights
