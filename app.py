@@ -3,13 +3,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 from automl import run_automl
-from cleaning import clean_data
-from visualizations import create_charts
 from evaluation import evaluate_model
 from feature_importance import plot_feature_importance
 from ai_insights import generate_ai_insights
 from report_generator import generate_report
-from data_loader import load_data
 
 st.set_page_config(page_title="AI Data Analyst Platform", page_icon="📊", layout="wide")
 st.title("📊 AI Data Analyst Platform")
@@ -49,14 +46,60 @@ if uploaded_file is not None:
             if df[c].isna().any():
                 df[c] = df[c].fillna(df[c].mode()[0])
 
-    st.header("🚨 Outlier Detection")
+    st.header("🚨 Outlier Handling")
+
+    outlier_option = st.selectbox(
+        "Choose Outlier Handling Method",
+        [
+            "Keep Outliers",
+            "Remove Outliers (IQR)"
+        ]
+    )
+
     out = []
+
     for c in numeric_cols:
-        q1,q3 = df[c].quantile([0.25,0.75])
-        iqr = q3-q1
-        n=((df[c]<q1-1.5*iqr)|(df[c]>q3+1.5*iqr)).sum()
-        out.append({"Column":c,"Outliers":n})
+
+        q1 = df[c].quantile(0.25)
+        q3 = df[c].quantile(0.75)
+
+        iqr = q3 - q1
+
+        lower = q1 - 1.5 * iqr
+        upper = q3 + 1.5 * iqr
+
+        outliers = ((df[c] < lower) | (df[c] > upper)).sum()
+
+        out.append({
+            "Column": c,
+            "Outliers": outliers
+        })
+
     st.dataframe(pd.DataFrame(out))
+
+    if outlier_option == "Remove Outliers (IQR)":
+
+        original_rows = len(df)
+
+        for c in numeric_cols:
+
+            q1 = df[c].quantile(0.25)
+            q3 = df[c].quantile(0.75)
+
+            iqr = q3 - q1
+
+            lower = q1 - 1.5 * iqr
+            upper = q3 + 1.5 * iqr
+
+            df = df[
+                (df[c] >= lower) &
+                (df[c] <= upper)
+            ]
+
+        removed = original_rows - len(df)
+
+        st.success(f"✅ {removed} outlier rows removed using IQR method.")
+        st.info(f"📊 Rows remaining after outlier removal: {len(df)}")
 
     st.header("🔁 Duplicate Data Check")
     dup=df.duplicated().sum()
