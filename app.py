@@ -6,7 +6,7 @@ from automl import run_automl
 from cleaning import clean_data
 from visualizations import create_charts
 from evaluation import evaluate_model
-from feature_importance import feature_importance
+from feature_importance import plot_feature_importance
 from ai_insights import generate_ai_insights
 from report_generator import generate_pdf_report
 from data_loader import load_data
