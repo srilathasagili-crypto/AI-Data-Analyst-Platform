@@ -1,0 +1,11 @@
+streamlit
+pandas
+numpy
+matplotlib
+scikit-learn
+openpyxl
+xgboost
+lightgbm
+catboost
+fpdf
+reportlab
