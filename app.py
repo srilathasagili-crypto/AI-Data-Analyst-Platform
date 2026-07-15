@@ -112,16 +112,16 @@ if uploaded_file is not None:
 
         removed = original_rows - len(df)
 
-        st.success(f"✅ {removed} outlier rows removed using IQR method.")
-        st.info(f"📊 Rows remaining after outlier removal: {len(df)}")
+        st.success(f" {removed} outlier rows removed using IQR method.")
+        st.info(f"Rows remaining after outlier removal: {len(df)}")
 
-    st.header("🔁 Duplicate Data Check")
+    st.header("Duplicate Data Check")
     dup=df.duplicated().sum()
     st.metric("Duplicate Rows",dup)
     if dup>0 and st.checkbox("Remove Duplicate Rows"):
         df=df.drop_duplicates()
 
-    st.header("📊 Data Quality Score")
+    st.header(" Data Quality Score")
     total=df.shape[0]*df.shape[1]
     miss=df.isna().sum().sum()
     comp=(total-miss)/total*100 if total else 100
@@ -130,20 +130,20 @@ if uploaded_file is not None:
     st.write(f"Duplicate Score: {dscore:.2f}%")
     st.write(f"Overall Score: {(comp+dscore)/2:.2f}%")
 
-    st.header("✅ Cleaned Dataset")
+    st.header("Cleaned Dataset")
     st.dataframe(df.head())
 
     numeric_cols=df.select_dtypes(include="number").columns
     categorical_cols=df.select_dtypes(include=["object","category"]).columns
 
-    st.subheader("📊 Dataset Summary")
+    st.subheader(" Dataset Summary")
     c1,c2,c3,c4=st.columns(4)
     c1.metric("Rows",len(df))
     c2.metric("Columns",df.shape[1])
     c3.metric("Missing",df.isna().sum().sum())
     c4.metric("Duplicates",df.duplicated().sum())
 
-    st.subheader("🧾 Column Information")
+    st.subheader(" Column Information")
     st.dataframe(pd.DataFrame({
         "Column":df.columns,
         "Type":df.dtypes.astype(str),
@@ -165,21 +165,21 @@ if uploaded_file is not None:
         plt.colorbar(im)
         st.pyplot(fig)
 
-    st.subheader("📉 Histograms")
+    st.subheader(" Histograms")
     for c in numeric_cols:
         fig,ax=plt.subplots()
         ax.hist(df[c].dropna(),bins=20)
         ax.set_title(c)
         st.pyplot(fig)
 
-    st.subheader("📦 Box Plots")
+    st.subheader(" Box Plots")
     for c in numeric_cols:
         fig,ax=plt.subplots()
         ax.boxplot(df[c].dropna(),vert=False)
         ax.set_title(c)
         st.pyplot(fig)
 
-    st.subheader("📊 Categorical Analysis")
+    st.subheader(" Categorical Analysis")
     for c in categorical_cols:
         st.write(c)
         counts=df[c].value_counts()
@@ -188,7 +188,7 @@ if uploaded_file is not None:
         counts.plot(kind="bar",ax=ax)
         st.pyplot(fig)
 
-    st.subheader("🔢 Unique Values")
+    st.subheader(" Unique Values")
     st.dataframe(pd.DataFrame({"Column":df.columns,"Unique":df.nunique().values}))
 
     csv=df.to_csv(index=False).encode()
@@ -196,7 +196,7 @@ if uploaded_file is not None:
 
     # INTERACTIVE VISUALIZATION #
 
-    st.header("📊 Interactive Visualization Dashboard")
+    st.header(" Interactive Visualization Dashboard")
 
     chart_type = st.selectbox(
         "Select Chart Type",
@@ -270,7 +270,7 @@ if uploaded_file is not None:
     with open(chart_name, "rb") as file:
 
         st.download_button(
-            "⬇️ Download Chart",
+            " Download Chart",
             file,
             file_name=chart_name,
             mime="image/png"
@@ -285,7 +285,7 @@ if uploaded_file is not None:
         df.columns
     )
 
-    if st.button("🚀 Run AutoML"):
+    if st.button(" Run AutoML"):
 
         problem, results, best_model, X_test, y_test, feature_names = run_automl(
             df,
@@ -296,7 +296,7 @@ if uploaded_file is not None:
             f"Problem Type: {problem}"
         )
 
-        st.write("### 📊 Model Performance")
+        st.write("###  Model Performance")
 
         st.dataframe(results)
 
@@ -314,7 +314,7 @@ if uploaded_file is not None:
         insights = generate_ai_insights(df)
 
         for insight in insights:
-            st.write("✅", insight)
+            st.write( insight)
 
         report_name = "AI_Data_Analysis_Report.pdf"
 
